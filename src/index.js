@@ -51,7 +51,7 @@ app.use(router);
 
 // Primer endpoint que se crea en el app web. Simplemente respode un mensaje cuando haces una petición a la url: http://localhost:3000/
 app.get("/", (req, res) => {
-    res.send('Hello world!')
+    res.send('Hello?')
 });
 
 //arranque del server 

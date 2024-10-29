@@ -59,7 +59,7 @@ async function getLogTemperatura(req,res){
   * Te servirá para crear reportes especializados si utilizas algún metodo de despliegue web para los
   * Dashboards.
   */
-async function getLogByDateBetween(req,res){
+async function getLogTemperatureByDateBetween(req,res){
   try{
     var sql = constants.selectTemperatureByDate;
 
@@ -152,4 +152,4 @@ async function insertLogTemperatura(req,res){
 
 
 
-module.exports = {insertLogTemperatura, getLogTemperatura,getLogByDateBetween};
+module.exports = {insertLogTemperatura, getLogTemperatura,getLogTemperatureByDateBetween};

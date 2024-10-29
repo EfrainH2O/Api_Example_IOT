@@ -40,6 +40,17 @@ INSERT INTO `temps` VALUES (1,35.00,'2024-08-28 17:00:13'),(2,34.50,'2024-08-28 
 /*!40000 ALTER TABLE `temps` ENABLE KEYS */;
 UNLOCK TABLES;
 
+
+
+DROP TABLE IF EXISTS `light`;
+CREATE TABLE `light` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `valor` decimal(18,2) DEFAULT NULL,
+  `fecha` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+UNLOCK TABLES;
+/*!40101 SET character_set_client = @saved_cs_client */;
 --
 -- Dumping routines for database 'iot'
 --

@@ -7,7 +7,7 @@
 const dbHost = "localhost";
 const dbPort = "3306";
 const dbUser = "root";
-const dbPass = "4747819";
+const dbPass = "useless_H2O";
 const dbName = "iot";
 
 
@@ -23,6 +23,10 @@ const api = '/api'; // Sugested API URL
 const getTemperatureSensor = '/getTemperatures'
 const getTemperatureSensorByDate = '/getTemperatures'
 const postTemperatureSensor = '/insertTemperature'; //Implemented Endpoint URL
+//Luminosidad
+const getLightSensor = '/getLight'
+const getLightSensorByDate = '/getLight'
+const postLightSensor = '/insertLight';
 
 
 /*
@@ -32,9 +36,15 @@ const postTemperatureSensor = '/insertTemperature'; //Implemented Endpoint URL
 const selectTemperature = 'SELECT * FROM temps';
 const selectTemperatureByDate = 'SELECT * FROM temps WHERE fecha between ? and ?';
 const insertTemperature = 'INSERT INTO temps (valor) values (?)';
+//Luminosidad sql
+const selectLightSensor = 'select * from light';
+const selectLightSensorByDate = 'select * from light where fecha between ? and ?';
+const insertLightSensor = 'insert into light (valor) values (?)'
 
 
 module.exports= {
    dbHost,dbPort,dbUser,dbPass,dbName,serverPort, contextURL,api,getTemperatureSensor,
-   getTemperatureSensorByDate,postTemperatureSensor,selectTemperature,selectTemperatureByDate,insertTemperature
+   getTemperatureSensorByDate,postTemperatureSensor,getLightSensor,getLightSensorByDate,postLightSensor, 
+   selectTemperature,selectTemperatureByDate,insertTemperature, selectLightSensor, selectLightSensorByDate,
+   insertLightSensor
 }

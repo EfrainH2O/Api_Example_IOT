@@ -10,10 +10,11 @@
 const constants = require("./constants")
 const express = require('express');
 const temperaturaController = require('./RestControllers/sensorTemperatura.js'); 
+const lightController = require('./RestControllers/sensorLuminosidad.js');
 const router = express.Router();
 
 router.get("/",function(req,res){
-    res.send('<html><head><title>API IoT</title></head><body><h1>Hello World!</h1></body></html>');
+    res.send('<html><head><title>API IoT</title></head><body><h1>Hellal!</h1></body></html>');
 });
 
 /**
@@ -27,9 +28,15 @@ router.get("/",function(req,res){
  * 
  */
 router.get(constants.contextURL + constants.api + constants.getTemperatureSensor, temperaturaController.getLogTemperatura);
-router.post(constants.contextURL + constants.api + constants.getTemperatureSensorByDate, temperaturaController.getLogByDateBetween);
+router.post(constants.contextURL + constants.api + constants.getTemperatureSensorByDate, temperaturaController.getLogTemperatureByDateBetween);
 router.post(constants.contextURL + constants.api + constants.postTemperatureSensor,temperaturaController.insertLogTemperatura);
+
+//Light
+
+router.get(constants.contextURL + constants.api + constants.getLightSensor, lightController.getLogLight);
+router.post(constants.contextURL + constants.api + constants.getLightSensorByDate, lightController.getLogLightByDateBetween);
+router.post(constants.contextURL + constants.api + constants.postLightSensor,lightController.insertLogLight);
 
 
 //le decimos a Node que queremos hacer uso de nuestro router en otros archivos (como por ejemplo, app.js)
-module.exports = router;
+module.exports = router; //Preguntar al profe;
