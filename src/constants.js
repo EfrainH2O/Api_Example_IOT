@@ -7,8 +7,8 @@
 const dbHost = "localhost";
 const dbPort = "3306";
 const dbUser = "root";
-const dbPass = "useless_H2O";
-const dbName = "iot";
+const dbPass = "d3ef"; //PONER TU CONTRASENA
+const dbName = "lifeguard360_basededatos"; //ASI TENGO YO EL NOMBRE DE LA BASE DE DATOS 
 
 
 
@@ -16,18 +16,13 @@ const dbName = "iot";
  * Server General Configuration
  */
 const serverPort = 3000
-const contextURL = '/iot'; //If needed, project context
+const contextURL = '/lifeguard360_basededatos'; //If needed, project context
 const api = '/api'; // Sugested API URL
 
 //SENSOR 1 URLS. Configurar URLS por cada sensor.
 const getTemperatureSensor = '/getTemperatures'
 const getTemperatureSensorByDate = '/getTemperatures'
 const postTemperatureSensor = '/insertTemperature'; //Implemented Endpoint URL
-//Luminosidad
-const getLightSensor = '/getLight'
-const getLightSensorByDate = '/getLight'
-const postLightSensor = '/insertLight';
-
 
 /*
  * DB Queries
@@ -36,15 +31,17 @@ const postLightSensor = '/insertLight';
 const selectTemperature = 'SELECT * FROM temps';
 const selectTemperatureByDate = 'SELECT * FROM temps WHERE fecha between ? and ?';
 const insertTemperature = 'INSERT INTO temps (valor) values (?)';
-//Luminosidad sql
-const selectLightSensor = 'select * from light';
-const selectLightSensorByDate = 'select * from light where fecha between ? and ?';
-const insertLightSensor = 'insert into light (valor) values (?)'
+
+//SENSOR Temperatura humedad
+const getTempHum = '/getTempHum'
+const postTemperatureHumSensor = '/insertTemperatureHum'; //Implemented Endpoint URL
+
+const selectTempHum = 'SELECT  id_temp_hum, fecha, temperatura, humedad FROM temperatura_humedad';
+const insertTemperatureHum = 'INSERT INTO temperatura_humedad (temperatura, humedad) values (?, ?)';
+
 
 
 module.exports= {
    dbHost,dbPort,dbUser,dbPass,dbName,serverPort, contextURL,api,getTemperatureSensor,
-   getTemperatureSensorByDate,postTemperatureSensor,getLightSensor,getLightSensorByDate,postLightSensor, 
-   selectTemperature,selectTemperatureByDate,insertTemperature, selectLightSensor, selectLightSensorByDate,
-   insertLightSensor
+   getTemperatureSensorByDate,postTemperatureSensor, selectTemperature,selectTemperatureByDate,insertTemperature, getTempHum, selectTempHum, postTemperatureHumSensor, insertTemperatureHum
 }
