@@ -24,16 +24,16 @@ DROP TABLE IF EXISTS `temps`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `temps` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `valor` decimal(18,2) DEFAULT NULL,
+  `Temp` decimal(18,2) DEFAULT NULL,
+  `Humedad` decimal(18,2) DEFAULT NULL,
   `fecha` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) 
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `temps`
 --
-
 LOCK TABLES `temps` WRITE;
 /*!40000 ALTER TABLE `temps` DISABLE KEYS */;
 INSERT INTO `temps` VALUES (1,35.00,'2024-08-28 17:00:13'),(2,34.50,'2024-08-28 17:05:13'),(3,35.50,'2024-08-28 17:10:13'),(4,33.00,'2024-08-28 17:15:13'),(5,35.00,'2024-08-28 17:20:13'),(6,34.00,'2024-08-28 17:25:13'),(7,32.00,'2024-08-28 17:30:13'),(8,33.00,'2024-08-28 17:35:13'),(9,33.90,'2024-08-28 17:40:13'),(10,34.50,'2024-08-28 17:45:13'),(11,38.00,'2024-08-29 18:09:08'),(12,39.50,'2024-08-29 18:09:25');
@@ -49,7 +49,6 @@ CREATE TABLE `light` (
   `fecha` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-UNLOCK TABLES;
 /*!40101 SET character_set_client = @saved_cs_client */;
 --
 -- Dumping routines for database 'iot'
