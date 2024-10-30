@@ -7,8 +7,8 @@
 const dbHost = "localhost";
 const dbPort = "3306";
 const dbUser = "root";
-const dbPass = "d3ef"; //PONER TU CONTRASENA
-const dbName = "lifeguard360_basededatos"; //ASI TENGO YO EL NOMBRE DE LA BASE DE DATOS 
+const dbPass = "eyj2508Mnsg/"; //CAMBIAR CONTRASENA
+const dbName = "lifeguard360_basededatos"; //NOMBRE DE LA BASE DE DATOS 
 
 
 
@@ -39,9 +39,16 @@ const postTemperatureHumSensor = '/insertTemperatureHum'; //Implemented Endpoint
 const selectTempHum = 'SELECT  id_temp_hum, fecha, temperatura, humedad FROM temperatura_humedad';
 const insertTemperatureHum = 'INSERT INTO temperatura_humedad (temperatura, humedad) values (?, ?)';
 
+//SENSORES con alarmas
+const getAlarma = '/getAlarma'
+const postAlarmaSensor = '/insertAlarma'; //Implemented Endpoint URL
 
+const selectAlarma = 'SELECT * FROM alarmas';
+const InsertAlarma= 'INSERT INTO alarmas (estado, ultrasonico, boton) values (?, ?, ?)';
 
 module.exports= {
    dbHost,dbPort,dbUser,dbPass,dbName,serverPort, contextURL,api,getTemperatureSensor,
-   getTemperatureSensorByDate,postTemperatureSensor, selectTemperature,selectTemperatureByDate,insertTemperature, getTempHum, selectTempHum, postTemperatureHumSensor, insertTemperatureHum
+   getTemperatureSensorByDate,postTemperatureSensor, selectTemperature,selectTemperatureByDate,
+   insertTemperature, getTempHum, selectTempHum, postTemperatureHumSensor, insertTemperatureHum,
+   getAlarma, postAlarmaSensor, selectAlarma, InsertAlarma
 }

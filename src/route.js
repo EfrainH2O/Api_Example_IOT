@@ -9,9 +9,14 @@
  */
 const constants = require("./constants")
 const express = require('express');
-const temperaturaController = require('./RestControllers/sensorTemperatura.js'); 
+const temperaturaController = require('./RestControllers/sensorTemperatura.js'); //Del profe
+//Sensor humedad
 const tempHumController = require('./RestControllers/sensor_temperatura_humedad.js');
 const temperaturaHumController = require('./RestControllers/sensor_temperatura_humedad.js');
+
+//sensores con alarmas (boton y ultrasonico)
+const alarmasController = require('./RestControllers/sensor_alarma.js');
+
 const router = express.Router();
 
 router.get("/",function(req,res){
@@ -32,8 +37,13 @@ router.get(constants.contextURL + constants.api + constants.getTemperatureSensor
 router.post(constants.contextURL + constants.api + constants.getTemperatureSensorByDate, temperaturaController.getLogTemperatureByDateBetween);
 router.post(constants.contextURL + constants.api + constants.postTemperatureSensor,temperaturaController.insertLogTemperatura);
 
+//Para sensor temperatura y humedad
 router.get(constants.contextURL + constants.api + constants.getTempHum, tempHumController.getLogTempHum);
 router.post(constants.contextURL + constants.api + constants.postTemperatureHumSensor, temperaturaHumController.insertLogTemperaturaHum);
 
+//Para sensor con alarma (boton y ultrasonico)
+router.get(constants.contextURL + constants.api + constants.getAlarma, alarmasController.getLogAlarmas);
+router.post(constants.contextURL + constants.api + constants.postAlarmaSensor, alarmasController.insertLogAlarmas);
+
 //le decimos a Node que queremos hacer uso de nuestro router en otros archivos (como por ejemplo, app.js)
-module.exports = router; //Preguntar al profe;
+module.exports = router; 
