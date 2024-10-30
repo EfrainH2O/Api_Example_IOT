@@ -49,8 +49,8 @@ router.get(constants.contextURL + constants.api + constants.getAlarma, alarmasCo
 router.post(constants.contextURL + constants.api + constants.postAlarmaSensor, alarmasController.insertLogAlarmas);
 
 //Para sensor con Fotoresistencia
-router.get(constants.contextURL + constants.api + constants.getFoteresistencia, FotoresistenciaController.getLogFotoresistencia);
+router.get(constants.contextURL + constants.api + constants.getFotoresistencia, FotoresistenciaController.getLogFotoresistencia);
 router.post(constants.contextURL + constants.api + constants.postFotoresistencia, FotoresistenciaController.insertLogFotoresistencia);
-
+router.post(constants.contextURL + constants.api + constants.getFotoresistenciaByDate,FotoresistenciaController.getLogFotoresistenciaByDateBetween);
 //le decimos a Node que queremos hacer uso de nuestro router en otros archivos (como por ejemplo, app.js)
 module.exports = router; 

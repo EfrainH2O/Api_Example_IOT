@@ -110,9 +110,40 @@ const constants = require("../constants")
     }
   }
   
+// Endpoint 3. getLogTemperatureHumByDateBetween
+async function getLogFotoresistenciaByDateBetween(req, res) {
+    try {
+      var sql = constants.selectFotoresistenciaByDate;
+  
+      var date_one = req.body.date_one;
+      var date_two = req.body.date_two;
+  
+      var conn = mysql.getConnection();
+      conn.connect((error) => {
+        if (error) throw error;
+        var params = [date_one, date_two];
+        conn.execute(sql, params, (error, data, fields) => {
+          if (error) {
+            res.status(500);
+            res.send(error.message);
+          } else {
+            console.log(data);
+            res.json({
+              data,
+            });
+          }
+          conn.end();
+        });
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500);
+      res.send(error);
+    }
+  }
+
   module.exports = {
     getLogFotoresistencia,
     insertLogFotoresistencia,
-  };
-
-  module.exports = {getLogFotoresistencia, insertLogFotoresistencia};  
+    getLogFotoresistenciaByDateBetween
+  };  

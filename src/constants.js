@@ -46,11 +46,13 @@ const selectAlarma = 'SELECT * FROM alarmas';
 const InsertAlarma = 'INSERT INTO alarmas (estado, ultrasonico, boton) values (?, ?, ?)';
 
 // SENSOR con Fotoresistencia
-const getFoteresistencia = '/getFotoresistencia';
+const getFotoresistencia = '/getFotoresistencia';
 const postFotoresistencia = '/insertFotoresistencia'; // Implemented Endpoint URL
+const getFotoresistenciaByDate = '/getFotoresistenciaByDate';
 
 const selectFotoresistencia = 'SELECT id_fotoresistencia, fecha, valor, nivel FROM Fotoresistencia';
 const insertFotoresistencia = 'INSERT INTO Fotoresistencia (fecha, valor, nivel) VALUES (?, ?, ?)';
+const selectFotoresistenciaByDate = 'SELECT * FROM Fotoresistencia WHERE fecha between ? and ?';
 
 module.exports = {
   dbHost,
@@ -77,8 +79,10 @@ module.exports = {
   postAlarmaSensor,
   selectAlarma,
   InsertAlarma,
-  getFoteresistencia,
+  getFotoresistencia,
   postFotoresistencia,
   selectFotoresistencia,
   insertFotoresistencia,
+  getFotoresistenciaByDate,
+  selectFotoresistenciaByDate,
 };

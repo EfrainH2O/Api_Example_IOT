@@ -16,6 +16,7 @@
 const mysql = require("../database/db");
 const constants = require("../constants")
 
+// Endpoint 1 get datos
 async function getLogTempHum(req,res){
     try{
   
