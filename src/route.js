@@ -42,6 +42,7 @@ router.post(constants.contextURL + constants.api + constants.postTemperatureSens
 //Para sensor temperatura y humedad
 router.get(constants.contextURL + constants.api + constants.getTempHum, temperaturaHumController.getLogTempHum);
 router.post(constants.contextURL + constants.api + constants.postTemperatureHumSensor, temperaturaHumController.insertLogTemperaturaHum);
+router.post(constants.contextURL + constants.api + constants.getTemperatureHumSensorByDate, temperaturaHumController.getLogTemperatureHumByDateBetween);
 
 //Para sensor con alarma (boton y ultrasonico)
 router.get(constants.contextURL + constants.api + constants.getAlarma, alarmasController.getLogAlarmas);
