@@ -1,4 +1,5 @@
-
+CREATE DATABASE lifeguard360_basededatos;
+USE lifeguard360_basededatos;
 
 DROP TABLE IF EXISTS Alarmas;
 CREATE TABLE Alarmas (
@@ -10,25 +11,12 @@ CREATE TABLE Alarmas (
 	CONSTRAINT Alarmas_pk PRIMARY KEY (Id_alarmas)
 );
 
-DROP TABLE IF EXISTS Nivel_iluminacion; 
-CREATE TABLE Nivel_iluminacion (
-	Id_nivel_iluminacion INT auto_increment NOT NULL,
-	nivel VARCHAR(10) NOT NULL,
-	CONSTRAINT Nivel_iluminacion_pk PRIMARY KEY (Id_nivel_iluminacion),
-	CONSTRAINT nivel_unique UNIQUE (nivel)  -- Índice único para permitir clave foránea
-);
-
-LOCK TABLES Nivel_iluminacion WRITE;
-INSERT INTO Nivel_iluminacion VALUES (1,"Bajo"),(2,"Medio"),(3,"Alto");
-UNLOCK TABLES;
-
-DROP TABLE IF EXISTS foto_resistencia;
-CREATE TABLE foto_resistencia (
-	id_fotoresistencia INT auto_increment NOT NULL,
-	fecha DATETIME DEFAULT now() NOT NULL,
-	nivel INT NOT NULL,
-	CONSTRAINT foto_resistencia_pk PRIMARY KEY (id_fotoresistencia),
-	CONSTRAINT nivel_fk FOREIGN KEY (nivel) REFERENCES Nivel_iluminacion(Id_nivel_iluminacion)
+CREATE TABLE Fotoresistencia (
+  id_fotoresistencia INT AUTO_INCREMENT NOT NULL,
+  fecha DATETIME DEFAULT NOW() NOT NULL,
+  valor INT NOT NULL,
+  nivel VARCHAR(10) NOT NULL,
+  CONSTRAINT foto_resistencia_pk PRIMARY KEY (id_fotoresistencia)
 );
 
 DROP TABLE IF EXISTS temperatura_humedad;

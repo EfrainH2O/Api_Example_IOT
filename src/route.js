@@ -11,11 +11,13 @@ const constants = require("./constants")
 const express = require('express');
 const temperaturaController = require('./RestControllers/sensorTemperatura.js'); //Del profe
 //Sensor humedad
-const tempHumController = require('./RestControllers/sensor_temperatura_humedad.js');
 const temperaturaHumController = require('./RestControllers/sensor_temperatura_humedad.js');
 
 //sensores con alarmas (boton y ultrasonico)
 const alarmasController = require('./RestControllers/sensor_alarma.js');
+
+//sensores con Fotoresistencia
+const FotoresistenciaController = require('./RestControllers/sensor_fotoresistencia.js');
 
 const router = express.Router();
 
@@ -38,12 +40,16 @@ router.post(constants.contextURL + constants.api + constants.getTemperatureSenso
 router.post(constants.contextURL + constants.api + constants.postTemperatureSensor,temperaturaController.insertLogTemperatura);
 
 //Para sensor temperatura y humedad
-router.get(constants.contextURL + constants.api + constants.getTempHum, tempHumController.getLogTempHum);
+router.get(constants.contextURL + constants.api + constants.getTempHum, temperaturaHumController.getLogTempHum);
 router.post(constants.contextURL + constants.api + constants.postTemperatureHumSensor, temperaturaHumController.insertLogTemperaturaHum);
 
 //Para sensor con alarma (boton y ultrasonico)
 router.get(constants.contextURL + constants.api + constants.getAlarma, alarmasController.getLogAlarmas);
 router.post(constants.contextURL + constants.api + constants.postAlarmaSensor, alarmasController.insertLogAlarmas);
+
+//Para sensor con Fotoresistencia
+router.get(constants.contextURL + constants.api + constants.getFoteresistencia, FotoresistenciaController.getLogFotoresistencia);
+router.post(constants.contextURL + constants.api + constants.postFotoresistencia, FotoresistenciaController.insertLogFotoresistencia);
 
 //le decimos a Node que queremos hacer uso de nuestro router en otros archivos (como por ejemplo, app.js)
 module.exports = router; 

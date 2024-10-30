@@ -7,7 +7,7 @@
 const dbHost = "localhost";
 const dbPort = "3306";
 const dbUser = "root";
-const dbPass = "eyj2508Mnsg/"; //CAMBIAR CONTRASENA
+const dbPass = "ernesto2003"; //CAMBIAR CONTRASENA
 const dbName = "lifeguard360_basededatos"; //NOMBRE DE LA BASE DE DATOS 
 
 
@@ -46,9 +46,17 @@ const postAlarmaSensor = '/insertAlarma'; //Implemented Endpoint URL
 const selectAlarma = 'SELECT * FROM alarmas';
 const InsertAlarma= 'INSERT INTO alarmas (estado, ultrasonico, boton) values (?, ?, ?)';
 
+//SENSOR con Fotoresistencia
+const getFoteresistencia = '/getFotoresistencia'
+const postFotoresistencia = '/insertFotoresistencia'; //Implemented Endpoint URL
+
+const selectFotoresistencia = 'SELECT id_fotoresistencia, fecha, valor, nivel FROM Fotoresistencia';
+const insertFotoresistencia = 'INSERT INTO Fotoresistencia (fecha, valor, nivel) VALUES (?, ?, ?)';
+
 module.exports= {
    dbHost,dbPort,dbUser,dbPass,dbName,serverPort, contextURL,api,getTemperatureSensor,
    getTemperatureSensorByDate,postTemperatureSensor, selectTemperature,selectTemperatureByDate,
    insertTemperature, getTempHum, selectTempHum, postTemperatureHumSensor, insertTemperatureHum,
-   getAlarma, postAlarmaSensor, selectAlarma, InsertAlarma
+   getAlarma, postAlarmaSensor, selectAlarma, InsertAlarma, getFoteresistencia, postFotoresistencia,
+   selectFotoresistencia, insertFotoresistencia
 }
