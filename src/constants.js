@@ -41,9 +41,12 @@ const selectTemperatureHumByDate = 'SELECT * FROM temperatura_humedad WHERE fech
 // SENSORES con alarmas
 const getAlarma = '/getAlarma';
 const postAlarmaSensor = '/insertAlarma'; // Implemented Endpoint URL
+const getAlarmaByDate = '/getAlarma';
 
 const selectAlarma = 'SELECT * FROM alarmas';
 const InsertAlarma = 'INSERT INTO alarmas (estado, ultrasonico, boton) values (?, ?, ?)';
+const selectAlarmaByDate = 'SELECT * FROM alarmas WHERE fecha between ? and ?';
+
 
 // SENSOR con Fotoresistencia
 const getFotoresistencia = '/getFotoresistencia';
@@ -98,8 +101,10 @@ module.exports = {
   // Sensor Alarma
   getAlarma,
   postAlarmaSensor,
+  getAlarmaByDate,
   selectAlarma,
   InsertAlarma,
+  selectAlarmaByDate,
   // Fotoresistencia
   getFotoresistencia,
   postFotoresistencia,
