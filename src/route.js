@@ -50,6 +50,10 @@ router.post(constants.contextURL + constants.api + constants.getTemperatureHumSe
 //Para sensor con alarma (boton y ultrasonico)
 router.get(constants.contextURL + constants.api + constants.getAlarma, alarmasController.getLogAlarmas);
 router.post(constants.contextURL + constants.api + constants.postAlarmaSensor, alarmasController.insertLogAlarmas);
+router.post(constants.contextURL + constants.api + constants.getAlarmaSensorByDate, alarmasController.getLogAlarmaByDateBetween);
+
+
+
 
 //Para sensor con Fotoresistencia
 router.get(constants.contextURL + constants.api + constants.getFotoresistencia, FotoresistenciaController.getLogFotoresistencia);
