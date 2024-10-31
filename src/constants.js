@@ -6,7 +6,7 @@
 const dbHost = "localhost";
 const dbPort = "3306";
 const dbUser = "root";
-const dbPass = "ernesto2003"; // CAMBIAR CONTRASENA
+const dbPass = "useless_H2O"; // CAMBIAR CONTRASENA
 const dbName = "lifeguard360_basededatos"; // NOMBRE DE LA BASE DE DATOS 
 
 /*
@@ -54,35 +54,65 @@ const selectFotoresistencia = 'SELECT id_fotoresistencia, fecha, valor, nivel FR
 const insertFotoresistencia = 'INSERT INTO Fotoresistencia (fecha, valor, nivel) VALUES (?, ?, ?)';
 const selectFotoresistenciaByDate = 'SELECT * FROM Fotoresistencia WHERE fecha between ? and ?';
 
+// SENSOR Switch
+
+const getSwitches = '/getSwicthes';
+const getSwicthesByDate = '/getSwicthes';
+const postSwicthes = '/insertSwicthes';
+
+const selectSwicthes = 'select * from switch';
+const selectSwitchesByDate = 'select * from switch where fecha between ? and ?';
+const selectLastSwitches = '\
+select *\
+from switch  \
+order by id_switch desc  \
+limit 1';
+const insertSwitches = 'insert into swicth (boton, ultrasonico, foto_resistencia, temperatura_humedad) values (?,?,?,?)'
+
+
 module.exports = {
+  // Connexion
   dbHost,
   dbPort,
   dbUser,
   dbPass,
   dbName,
   serverPort,
+  // ULRbase
   contextURL,
   api,
+  // Sensor Temp
   getTemperatureSensor,
   getTemperatureSensorByDate,
   postTemperatureSensor,
   selectTemperature,
   selectTemperatureByDate,
   insertTemperature,
+  // SensorTempHum
   getTempHum,
   selectTempHum,
   postTemperatureHumSensor,
   insertTemperatureHum,
   getTemperatureHumSensorByDate,
   selectTemperatureHumByDate,
+  // Sensor Alarma
   getAlarma,
   postAlarmaSensor,
   selectAlarma,
   InsertAlarma,
+  // Fotoresistencia
   getFotoresistencia,
   postFotoresistencia,
   selectFotoresistencia,
   insertFotoresistencia,
   getFotoresistenciaByDate,
   selectFotoresistenciaByDate,
+  // Switches
+  getSwitches,
+  getSwicthesByDate,
+  postSwicthes,
+  selectSwicthes,
+  selectSwitchesByDate,
+  selectLastSwitches,
+  insertSwitches,
 };

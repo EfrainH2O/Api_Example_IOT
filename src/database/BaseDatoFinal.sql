@@ -1,5 +1,4 @@
-CREATE DATABASE lifeguard360_basededatos;
-USE lifeguard360_basededatos;
+
 
 DROP TABLE IF EXISTS Alarmas;
 CREATE TABLE Alarmas (
@@ -11,6 +10,7 @@ CREATE TABLE Alarmas (
 	CONSTRAINT Alarmas_pk PRIMARY KEY (Id_alarmas)
 );
 
+DROP table if EXISTS Fotoresistencia;
 CREATE TABLE Fotoresistencia (
   id_fotoresistencia INT AUTO_INCREMENT NOT NULL,
   fecha DATETIME DEFAULT NOW() NOT NULL,
@@ -35,5 +35,12 @@ CREATE TABLE switch (
 	ultrasonico BOOL NOT NULL,
 	foto_resistencia BOOL NOT NULL,
 	temperatura_humedad BOOL NOT NULL,
+	fecha DATETIME DEFAULT NOW() NOT NULL,
 	CONSTRAINT switch_pk PRIMARY KEY (id_switch)
-);
+)AUTO_INCREMENT=2;
+
+LOCK TABLES switch WRITE;
+/*!40000 ALTER TABLE switch DISABLE KEYS */;
+INSERT INTO switch VALUES (1,0,0,0,0,'2024-08-28 17:00:13');
+/*!40000 ALTER TABLE switch ENABLE KEYS */;
+UNLOCK TABLES;

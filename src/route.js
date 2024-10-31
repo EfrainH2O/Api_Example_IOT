@@ -19,6 +19,9 @@ const alarmasController = require('./RestControllers/sensor_alarma.js');
 //sensores con Fotoresistencia
 const FotoresistenciaController = require('./RestControllers/sensor_fotoresistencia.js');
 
+// Switch functions controller;
+const SwitchController = require('./RestControllers/sensor_switch');
+
 const router = express.Router();
 
 router.get("/",function(req,res){
@@ -52,5 +55,12 @@ router.post(constants.contextURL + constants.api + constants.postAlarmaSensor, a
 router.get(constants.contextURL + constants.api + constants.getFotoresistencia, FotoresistenciaController.getLogFotoresistencia);
 router.post(constants.contextURL + constants.api + constants.postFotoresistencia, FotoresistenciaController.insertLogFotoresistencia);
 router.post(constants.contextURL + constants.api + constants.getFotoresistenciaByDate,FotoresistenciaController.getLogFotoresistenciaByDateBetween);
+
+//Entradas Switch
+
+router.post(constants.contextURL + constants.api + constants.postSwicthes,SwitchController.insertLogSwitches);
+router.post(constants.contextURL + constants.api + constants.getSwicthesByDate, SwitchController.getLogSwitchesByDateBetween);
+router.get(constants.contextURL + constants.api + constants.getSwitches, SwitchController.getLogSwitches);
+
 //le decimos a Node que queremos hacer uso de nuestro router en otros archivos (como por ejemplo, app.js)
 module.exports = router; 
