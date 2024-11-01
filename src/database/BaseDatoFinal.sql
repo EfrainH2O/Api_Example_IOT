@@ -1,5 +1,4 @@
 
-#Cada uno de las tablas es independientes entre si, noy hay como tal una relacion
 
 DROP TABLE IF EXISTS Alarmas;
 CREATE TABLE Alarmas (
@@ -10,7 +9,6 @@ CREATE TABLE Alarmas (
 	boton BOOL NOT NULL,
 	CONSTRAINT Alarmas_pk PRIMARY KEY (Id_alarmas)
 );
-# Tabla de alarmas, con datos relevantes para el analisis de informacion
 
 DROP table if EXISTS Fotoresistencia;
 CREATE TABLE Fotoresistencia (

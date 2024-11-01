@@ -67,7 +67,7 @@ const api = '/api'; // Suggested API URL
   const selectSwicthes = 'select * from switch';
   const selectSwitchesByDate = 'select * from switch where fecha between ? and ?';
   const selectLastSwitches = '  select * from switch order by id_switch desc limit 1';
-  const insertSwitches = 'insert into swicth (boton, ultrasonico, foto_resistencia, temperatura_humedad) values (?,?,?,?)';
+  const insertSwitches = 'insert into switch (boton, ultrasonico, foto_resistencia, temperatura_humedad) values (?,?,?,?)';
 
 
 module.exports = {
