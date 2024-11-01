@@ -38,6 +38,7 @@ router.get("/",function(req,res){
  * Para otros sensores, puedes agregar otros archivos y configurar sus url's.
  * 
  */
+//Entradas Base
 router.get(constants.contextURL + constants.api + constants.getTemperatureSensor, temperaturaController.getLogTemperatura);
 router.post(constants.contextURL + constants.api + constants.getTemperatureSensorByDate, temperaturaController.getLogTemperatureByDateBetween);
 router.post(constants.contextURL + constants.api + constants.postTemperatureSensor,temperaturaController.insertLogTemperatura);
@@ -52,16 +53,12 @@ router.get(constants.contextURL + constants.api + constants.getAlarma, alarmasCo
 router.post(constants.contextURL + constants.api + constants.postAlarmaSensor, alarmasController.insertLogAlarmas);
 router.post(constants.contextURL + constants.api + constants.getAlarmaSensorByDate, alarmasController.getLogAlarmaByDateBetween);
 
-
-
-
 //Para sensor con Fotoresistencia
 router.get(constants.contextURL + constants.api + constants.getFotoresistencia, FotoresistenciaController.getLogFotoresistencia);
 router.post(constants.contextURL + constants.api + constants.postFotoresistencia, FotoresistenciaController.insertLogFotoresistencia);
 router.post(constants.contextURL + constants.api + constants.getFotoresistenciaByDate,FotoresistenciaController.getLogFotoresistenciaByDateBetween);
 
 //Entradas Switch
-
 router.post(constants.contextURL + constants.api + constants.postSwicthes,SwitchController.insertLogSwitches);
 router.post(constants.contextURL + constants.api + constants.getSwicthesByDate, SwitchController.getLogSwitchesByDateBetween);
 router.get(constants.contextURL + constants.api + constants.getSwitches, SwitchController.getLogSwitches);
