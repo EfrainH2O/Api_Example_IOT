@@ -74,7 +74,7 @@ async function insertLogAlarmas(req,res){
 
 
 
-
+// Endpoint 3 para la recopilacion de informacion filtrado por fechas
 async function getLogTemperatureByDateBetween(req,res){
   try{
     var sql = constants.selectTemperatureByDate;
