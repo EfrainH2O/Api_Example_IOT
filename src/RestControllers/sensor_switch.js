@@ -2,7 +2,7 @@
 const mysql = require("../database/db");
 const constants = require("../constants")
 
-
+// Endpoint para poder recopilar toda la informacion dentro de la base de datos
 async function getLogSwitches(req,res){
     try{
   
@@ -30,6 +30,7 @@ async function getLogSwitches(req,res){
     }
   }
 
+// Endpoint para recopilar la informacion de la base de datos entre especificas fechas  
 async function getLogSwitchesByDateBetween(req,res){
     try{
         var sql = constants.selectSwitchesByDate;
@@ -61,6 +62,8 @@ async function getLogSwitchesByDateBetween(req,res){
 
 }
 
+
+//Endpoint para la insercion de informacion
 async function insertLogSwitches(req,res){
     try{
 
@@ -72,8 +75,10 @@ async function insertLogSwitches(req,res){
         var prevA = 0;
         var prevB = 0;
         var conn = mysql.getConnection();
+        // 
         conn.connect((error)=>{
             if (error) throw error;
+            //Funcion de revision de datos previos
             conn.query(sqlRetrieve, (error, data, fields) => {
                 if (error) {
                     res.status(500);
@@ -94,6 +99,7 @@ async function insertLogSwitches(req,res){
             }else{
                 var params = [prevA,prevB,sA,sB]; 
             }
+            // Funcion de insercion de informacion
             conn.execute(sqlInsert, params, (error, data, fields) => {
                 if (error) {
                     res.status(500);
