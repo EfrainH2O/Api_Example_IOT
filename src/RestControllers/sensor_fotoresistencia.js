@@ -1,17 +1,4 @@
-/**
-  * Endpoint #1. getLogTempHum
-  * 
-  * Este método realiza un select de todos los registros ubicados en
-  * una tabla llamada "sensor_temperatura".
-  * 
-  * Resultado: Obtendrá todos los registros de la tabla "sensor_temperatura" 
-  * Todas las columnas están contempladas. 
-  * 
-  * Puedes sustituirla utilizando una proyección a tu tabla incluyendo las columnas que necesites.
-  * 
-  * Te servirá para crear reportes especializados si utilizas algún metodo de despliegue web para los
-  * Dashboards.
-  */
+
 
 const mysql = require("../database/db");
 const constants = require("../constants")
@@ -110,7 +97,7 @@ const constants = require("../constants")
     }
   }
   
-// Endpoint 3. getLogTemperatureHumByDateBetween
+// Endpoint 3. Pedir entre 2 fechas
 async function getLogFotoresistenciaByDateBetween(req, res) {
     try {
       var sql = constants.selectFotoresistenciaByDate;

@@ -16,16 +16,7 @@ const serverPort = 3000;
 const contextURL = '/lifeguard360_basededatos'; // If needed, project context
 const api = '/api'; // Suggested API URL
 
-// Sensor Base URLS
-  //HTTPS
-  const getTemperatureSensor = '/getTemperatures';
-  const getTemperatureSensorByDate = '/getTemperatures';
-  const postTemperatureSensor = '/insertTemperature'; // Implemented Endpoint URL
 
-  // SQL
-  const selectTemperature = 'SELECT * FROM temps';
-  const selectTemperatureByDate = 'SELECT * FROM temps WHERE fecha between ? and ?';
-  const insertTemperature = 'INSERT INTO temps (valor) values (?)';
 
 // SENSOR Temperatura humedad
   //HTTPS
@@ -81,13 +72,7 @@ module.exports = {
   // ULRbase
   contextURL,
   api,
-  // Sensor Temp
-  getTemperatureSensor,
-  getTemperatureSensorByDate,
-  postTemperatureSensor,
-  selectTemperature,
-  selectTemperatureByDate,
-  insertTemperature,
+
   // SensorTempHum
   getTempHum,
   selectTempHum,
