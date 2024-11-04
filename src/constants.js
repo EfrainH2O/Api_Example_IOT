@@ -6,7 +6,7 @@
 const dbHost = "localhost";
 const dbPort = "3306";
 const dbUser = "root";
-const dbPass = "useless_H2O"; // CAMBIAR CONTRASENA
+const dbPass = "reffg"; // CAMBIAR CONTRASENA
 const dbName = "lifeguard360_basededatos"; // NOMBRE DE LA BASE DE DATOS 
 
 /*

@@ -21,9 +21,7 @@ router.get("/",function(req,res){
 
 
 //Entradas Base
-router.get(constants.contextURL + constants.api + constants.getTemperatureSensor, temperaturaController.getLogTemperatura);
-router.post(constants.contextURL + constants.api + constants.getTemperatureSensorByDate, temperaturaController.getLogTemperatureByDateBetween);
-router.post(constants.contextURL + constants.api + constants.postTemperatureSensor,temperaturaController.insertLogTemperatura);
+
 
 //Para sensor temperatura y humedad
 router.get(constants.contextURL + constants.api + constants.getTempHum, temperaturaHumController.getLogTempHum);
