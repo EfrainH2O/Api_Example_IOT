@@ -6,7 +6,7 @@
 const dbHost = "mysql-14c18e91-tec-acff.b.aivencloud.com";
 const dbPort = "25482";
 const dbUser = "avnadmin";
-const dbPass = "olos"; // CAMBIAR CONTRASENA
+const dbPass = "123456"; // CAMBIAR CONTRASENA
 const dbName = "lifeguard360_basededatos"; // NOMBRE DE LA BASE DE DATOS 
 
 /*
@@ -51,9 +51,9 @@ const api = '/api'; // Suggested API URL
 
 // SENSOR Switch
   //HTTPS
-  const getSwitches = '/getSwicthes';
-  const getSwicthesByDate = '/getSwicthes';
-  const postSwicthes = '/insertSwicthes';
+  const getSwitches = '/getSwitches';
+  const getSwicthesByDate = '/getSwitches';
+  const postSwicthes = '/insertSwitches';
   //SQL
   const selectSwicthes = 'select * from switch';
   const selectSwitchesByDate = 'select * from switch where fecha between ? and ?';

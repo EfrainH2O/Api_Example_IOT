@@ -102,6 +102,7 @@ async function insertLogSwitches(req, res) {
                         prevD = lastRecord.ultrasonico;
 
                         if(prevC == sA && prevD == sB){
+                            res.status(200).send("No");
                             conn.end();
                             return
                         }
@@ -112,6 +113,7 @@ async function insertLogSwitches(req, res) {
                         prevD = lastRecord.temperatura_humedad;
 
                         if(prevC == sA && prevD == sB){
+                            res.status(200).send("No");
                             conn.end();
                             return
                         }
@@ -132,7 +134,6 @@ async function insertLogSwitches(req, res) {
 
                 // Se insertan nuevos valores del switch
                 conn.execute(sqlInsert, params, (error, data) => {
-                    conn.end();
                     if (error) {
                         res.status(500).send(error.message);
                     } else {
@@ -142,6 +143,7 @@ async function insertLogSwitches(req, res) {
                             affectedRows: data.affectedRows,
                         });
                     }
+                    conn.end();
                 });
             });
         });
