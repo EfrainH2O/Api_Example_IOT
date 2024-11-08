@@ -1,108 +1,111 @@
-
 const mysql = require("../database/db");
-const constants = require("../constants")
+const constants = require("../constants");
 
-// Endpoint 1 get datos
-async function getLogTempHum(req,res){
-    try{
-  
-      var sql = constants.selectTempHum;
-      var conn = mysql.getConnection();
-      conn.connect((error)=>{
-          if (error) throw error;
-          conn.query(sql, (error, data, fields) => {
-              if (error) {
-                res.status(500);
-                res.send(error.message);
-              } else {
-                console.log(data);
-                res.json({
-                  data,
-                });
-              }
-              conn.end();
-          });
+// Variable para almacenar el último dato recibido
+let latestData = null;
+
+// Define un intervalo de tiempo para enviar datos (por ejemplo, cada 60 segundos)
+const INTERVAL = 5000; // 5 segundos
+
+// Función para insertar el dato más reciente en la base de datos
+function sendLatestDataToDatabase() {
+  if (latestData !== null) {
+    const { temperatura, humedad } = latestData;
+    const conn = mysql.getConnection();
+
+    conn.connect((error) => {
+      if (error) {
+        console.error('Error connecting to database:', error);
+        return;
+      }
+
+      const sql = constants.insertTemperatureHum;
+      const params = [temperatura, humedad];
+
+      conn.execute(sql, params, (error, data) => {
+        if (error) {
+          console.error('Error executing query:', error);
+        } else {
+          console.log('Latest data inserted:', data);
+        }
+        conn.end();
       });
-    }catch(error){
-      console.log(error)
-      res.status(500)
-      res.send(error)
-    }
+
+      // Limpiar el último dato después de insertarlo
+      latestData = null;
+    });
   }
- 
+}
 
-  //Endpoint 2 insertar datos 
+// Configurar el intervalo para enviar los datos más recientes
+setInterval(sendLatestDataToDatabase, INTERVAL);
 
-  async function insertLogTemperaturaHum(req,res){
-    try{
-  
-      var sql = constants.insertTemperatureHum;
-  
-      //el valor se recibe en el cuerpo de correo
-      //cualquier dato que vaya a ir en el insert deberás guardarlo en una variable local
-      var temperatura = req.body.temperatura;
-      var humedad = req.body.humedad;
-  
-      var conn = mysql.getConnection();
-      conn.connect((error)=>{
-          if (error) throw error;
-  
-          // así mismo, cualquier dato que vaya a insertarse, deberá incluirse en
-          // los valores de los parámetros del Insert
-          var params = [temperatura, humedad];
-          conn.execute(sql, params, (error, data, fields) => {
-              if (error) {
-                res.status(500);
-                res.send(error.message);
-              } else {
-                console.log(data);
-                res.json({
-                  status: 200,
-                  message: "Valor insertado",
-                  affectedRows: data.affectedRows,
-                });
-              }
-              conn.end();
-          });
-      });
-  
-    }catch(error){
-      console.log(error)
-      res.status(500)
-      res.send(error)
-    }
-    
-  }
-
-// Endpoint 3. getLogTemperatureHumByDateBetween
-async function getLogTemperatureHumByDateBetween(req, res) {
+// Endpoint para insertar datos de temperatura y humedad
+async function insertLogTemperaturaHum(req, res) {
   try {
-    var sql = constants.selectTemperatureHumByDate;
+    // Recibir los datos del cuerpo de la solicitud
+    const temperatura = req.body.temperatura;
+    const humedad = req.body.humedad;
 
-    var date_one = req.body.date_one;
-    var date_two = req.body.date_two;
+    // Almacenar el último dato recibido
+    latestData = { temperatura, humedad };
 
-    var conn = mysql.getConnection();
+    // Responder que los datos han sido recibidos
+    res.json({
+      status: 200,
+      message: 'Latest data received and buffered for future insertion.',
+    });
+  } catch (error) {
+    console.error('Unexpected error:', error);
+    res.status(500).send(error.message);
+  }
+}
+
+// Otros endpoints
+async function getLogTempHum(req, res) {
+  try {
+    const sql = constants.selectTempHum;
+    const conn = mysql.getConnection();
     conn.connect((error) => {
       if (error) throw error;
-      var params = [date_one, date_two];
-      conn.execute(sql, params, (error, data, fields) => {
+      conn.query(sql, (error, data, fields) => {
         if (error) {
-          res.status(500);
-          res.send(error.message);
+          res.status(500).send(error.message);
         } else {
           console.log(data);
-          res.json({
-            data,
-          });
+          res.json({ data });
         }
         conn.end();
       });
     });
   } catch (error) {
-    console.log(error);
-    res.status(500);
-    res.send(error);
+    console.error(error);
+    res.status(500).send(error.message);
+  }
+}
+
+async function getLogTemperatureHumByDateBetween(req, res) {
+  try {
+    const sql = constants.selectTemperatureHumByDate;
+    const date_one = req.body.date_one;
+    const date_two = req.body.date_two;
+    const conn = mysql.getConnection();
+    conn.connect((error) => {
+      if (error) throw error;
+      const params = [date_one, date_two];
+      conn.execute(sql, params, (error, data, fields) => {
+        if (error) {
+          res.status(500).send(error.message);
+        } else {
+          console.log(data);
+          res.json({ data });
+        }
+        conn.end();
+      });
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(error.message);
   }
 }
 

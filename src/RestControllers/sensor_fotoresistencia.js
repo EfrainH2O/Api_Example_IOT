@@ -1,136 +1,142 @@
-
-
 const mysql = require("../database/db");
-const constants = require("../constants")
+const constants = require("../constants");
 
-  // Endpoint 1 get datos
-  async function getLogFotoresistencia(req, res) {
-    try {
-      const sql = constants.selectFotoresistencia;
+// Variables para almacenar el último dato recibido y el último nivel enviado
+let latestData = null;
+let lastSentLevel = null;
+
+// Define un intervalo de tiempo para enviar datos (por ejemplo, cada 60 segundos)
+const INTERVAL = 5000; // 5 segundos
+
+// Función para insertar el dato más reciente en la base de datos si el nivel es diferente
+function sendLatestDataToDatabase() {
+  if (latestData !== null) {
+    const { valor, nivel } = latestData;
+
+    // Solo enviar si el nivel es diferente al último nivel enviado
+    if (nivel !== lastSentLevel) {
       const conn = mysql.getConnection();
-  
+
       conn.connect((error) => {
         if (error) {
           console.error('Error connecting to database:', error);
-          res.status(500).send(error.message);
           return;
         }
-  
-        conn.query(sql, (error, data, fields) => {
+
+        const sql = constants.insertFotoresistencia;
+        const params = [new Date(), valor, nivel];
+
+        conn.execute(sql, params, (error, data) => {
           if (error) {
             console.error('Error executing query:', error);
-            res.status(500).send(error.message);
           } else {
-            // Formatear la fecha si es necesario
-            const formattedData = data.map((record) => ({
-              ...record,
-              fecha: new Date(record.fecha).toLocaleString('es-ES', { timeZone: 'UTC' }),
-            }));
-            console.log('Data retrieved:', formattedData);
-            res.json({
-              data: formattedData,
-            });
+            console.log('Latest data inserted:', data);
+            // Actualizar el último nivel enviado
+            lastSentLevel = nivel;
           }
           conn.end();
         });
+
+        // Limpiar el último dato después de insertarlo
+        latestData = null;
       });
-    } catch (error) {
-      console.error('Unexpected error:', error);
-      res.status(500).send(error.message);
+    } else {
+      latestData = null; // Limpiar, aunque no se envíe
     }
   }
-  
-  // Método POST para insertar un nuevo registro en Fotoresistencia
-  async function insertLogFotoresistencia(req, res) {
-    try {
-      const sql = constants.insertFotoresistencia;
-      const valor = req.body.valor;
-  
-      // Validación: verificar que 'valor' es un número
-      if (typeof valor !== 'number') {
-        res.status(400).send('El valor del sensor debe ser un número.');
-        return;
-      }
-  
-      // Determinar el nivel en función del valor
-      let nivel = '';
-      if (valor < 100) {
-        nivel = 'Bajo';
-      } else if (valor >= 100 && valor <= 200) {
-        nivel = 'Medio';
-      } else if (valor > 200) {
-        nivel = 'Alto';
-      } else {
-        nivel = 'Desconocido';
-      }
-  
-      // Obtener la fecha actual
-      const fecha = new Date();
-  
-      const conn = mysql.getConnection();
-      conn.connect((error) => {
+}
+
+// Configurar el intervalo para enviar los datos más recientes
+setInterval(sendLatestDataToDatabase, INTERVAL);
+
+// Endpoint para insertar datos de Fotoresistencia
+async function insertLogFotoresistencia(req, res) {
+  try {
+    // Recibir los datos del cuerpo de la solicitud
+    const valor = req.body.valor;
+
+    // Determinar el nivel en función del valor
+    let nivel = '';
+    if (valor < 100) {
+      nivel = 'Bajo';
+    } else if (valor >= 100 && valor <= 200) {
+      nivel = 'Medio';
+    } else if (valor > 200) {
+      nivel = 'Alto';
+    } else {
+      nivel = 'Desconocido';
+    }
+
+    // Almacenar el último dato recibido
+    latestData = { valor, nivel };
+
+    // Responder que los datos han sido recibidos
+    res.json({
+      status: 200,
+      message: 'Latest data received and buffered for future insertion.',
+    });
+  } catch (error) {
+    console.error('Unexpected error:', error);
+    res.status(500).send(error.message);
+  }
+}
+
+// Otros endpoints
+async function getLogFotoresistencia(req, res) {
+  try {
+    const sql = constants.selectFotoresistencia;
+    const conn = mysql.getConnection();
+
+    conn.connect((error) => {
+      if (error) throw error;
+      conn.query(sql, (error, data, fields) => {
         if (error) {
-          console.error('Error connecting to database:', error);
           res.status(500).send(error.message);
-          return;
+        } else {
+          const formattedData = data.map((record) => ({
+            ...record,
+            fecha: new Date(record.fecha).toLocaleString('es-ES', { timeZone: 'UTC' }),
+          }));
+          console.log('Data retrieved:', formattedData);
+          res.json({ data: formattedData });
         }
-  
-        const params = [fecha, valor, nivel];
-        conn.execute(sql, params, (error, data, fields) => {
-          if (error) {
-            console.error('Error executing query:', error);
-            res.status(500).send(error.message);
-          } else {
-            console.log('Data inserted:', data);
-            res.json({
-              status: 200,
-              message: 'Valor insertado',
-              affectedRows: data.affectedRows,
-            });
-          }
-          conn.end();
-        });
+        conn.end();
       });
-    } catch (error) {
-      console.error('Unexpected error:', error);
-      res.status(500).send(error.message);
-    }
+    });
+  } catch (error) {
+    console.error('Unexpected error:', error);
+    res.status(500).send(error.message);
   }
-  
-// Endpoint 3. Pedir entre 2 fechas
+}
+
 async function getLogFotoresistenciaByDateBetween(req, res) {
-    try {
-      var sql = constants.selectFotoresistenciaByDate;
-  
-      var date_one = req.body.date_one;
-      var date_two = req.body.date_two;
-  
-      var conn = mysql.getConnection();
-      conn.connect((error) => {
-        if (error) throw error;
-        var params = [date_one, date_two];
-        conn.execute(sql, params, (error, data, fields) => {
-          if (error) {
-            res.status(500);
-            res.send(error.message);
-          } else {
-            console.log(data);
-            res.json({
-              data,
-            });
-          }
-          conn.end();
-        });
+  try {
+    const sql = constants.selectFotoresistenciaByDate;
+    const date_one = req.body.date_one;
+    const date_two = req.body.date_two;
+    const conn = mysql.getConnection();
+    
+    conn.connect((error) => {
+      if (error) throw error;
+      const params = [date_one, date_two];
+      conn.execute(sql, params, (error, data, fields) => {
+        if (error) {
+          res.status(500).send(error.message);
+        } else {
+          console.log(data);
+          res.json({ data });
+        }
+        conn.end();
       });
-    } catch (error) {
-      console.log(error);
-      res.status(500);
-      res.send(error);
-    }
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(error.message);
   }
+}
 
-  module.exports = {
-    getLogFotoresistencia,
-    insertLogFotoresistencia,
-    getLogFotoresistenciaByDateBetween
-  };  
+module.exports = {
+  getLogFotoresistencia,
+  insertLogFotoresistencia,
+  getLogFotoresistenciaByDateBetween,
+};

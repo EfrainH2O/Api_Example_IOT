@@ -64,64 +64,92 @@ async function getLogSwitchesByDateBetween(req,res){
 
 
 //Endpoint para la insercion de informacion
-async function insertLogSwitches(req,res){
-    try{
+async function insertLogSwitches(req, res) {
+    try {
+        const sqlInsert = constants.insertSwitches;
+        const sqlRetrieve = constants.selectLastSwitches;
+        const nodo = req.body.nodo;
+        const sA = req.body.s1;
+        const sB = req.body.s2;
+        let prevA = 0;
+        let prevB = 0;
+        let prevC = 0;
+        let prevD = 0;
 
-        var sqlInsert = constants.insertSwitches;
-        var sqlRetrieve  = constants.selectLastSwitches;
-        var nodo = req.body.nodo;
-        var sA = req.body.s1;
-        var sB = req.body.s2;
-        var prevA = 0;
-        var prevB = 0;
-        var conn = mysql.getConnection();
-        // 
-        conn.connect((error)=>{
-            if (error) throw error;
-            //Funcion de revision de datos previos
-            conn.query(sqlRetrieve, (error, data, fields) => {
-                if (error) {
-                    res.status(500);
-                    res.send(error.message);
-                } else {
-                    if(nodo == 'N1'){
-                        prevA = data.foto_resistencia;
-                        prevB = data.temperatura_humedad;
-                    }else{
-                        prevA = data.boton;
-                        prevB = data.ultrasonico;
-                    }
-                    console.log(data);
-                }
-            });
-            if(nodo == "N1"){
-                var params = [sA,sB,prevA,prevB]; 
-            }else{
-                var params = [prevA,prevB,sA,sB]; 
+
+        const conn = mysql.getConnection();
+        conn.connect((error) => {
+            if (error) {
+                console.error('Error conectandose a la base de datos:', error);
+                res.status(500).send('Database connection failed.');
+                return;
             }
-            // Funcion de insercion de informacion
-            conn.execute(sqlInsert, params, (error, data, fields) => {
+
+            // Se recuperan los ultimos datos
+            conn.query(sqlRetrieve, (error, results) => {
                 if (error) {
-                    res.status(500);
-                    res.send(error.message);
-                } else {
-                    console.log(data);
-                    res.json({
-                        status: 200,
-                        message: "Valor insertado",
-                        affectedRows: data.affectedRows,
-                    });
+                    conn.end();
+                    res.status(500).send(error.message);
+                    return;
                 }
-                conn.end();
+
+                if (results.length > 0) {
+                    const lastRecord = results[0];
+                    if (nodo === 'N1') {
+                        prevA = lastRecord.foto_resistencia;
+                        prevB = lastRecord.temperatura_humedad;
+                        prevC = lastRecord.boton;
+                        prevD = lastRecord.ultrasonico;
+
+                        if(prevC == sA && prevD == sB){
+                            conn.end();
+                            return
+                        }
+                    } else {
+                        prevA = lastRecord.boton;
+                        prevB = lastRecord.ultrasonico;
+                        prevC = lastRecord.foto_resistencia;
+                        prevD = lastRecord.temperatura_humedad;
+
+                        if(prevC == sA && prevD == sB){
+                            conn.end();
+                            return
+                        }
+
+                    }
+                } else {
+                    // Se avisa si no se encontraron valores anteriores.
+                    console.log("No se encontraron datos anteriores.");
+                    // Si no se encuentran, se reemplazan con 0
+                }
+                
+                
+
+                //Se verifica que se recuperaron correctamente los calores
+                const params = nodo === 'N1' ? [sA, sB, prevA, prevB] : [prevA, prevB, sA, sB];
+
+                console.log("Insertando con los paremetros:", params);
+
+                // Se insertan nuevos valores del switch
+                conn.execute(sqlInsert, params, (error, data) => {
+                    conn.end();
+                    if (error) {
+                        res.status(500).send(error.message);
+                    } else {
+                        res.json({
+                            status: 200,
+                            message: "Valor insertado",
+                            affectedRows: data.affectedRows,
+                        });
+                    }
+                });
             });
         });
-    }catch(error){
-      console.log(error)
-      res.status(500)
-      res.send(error)
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).send('Error insesperado.');
     }
-    
-  }
+}
   
 
   module.exports = {
@@ -129,4 +157,4 @@ async function insertLogSwitches(req,res){
     getLogSwitchesByDateBetween,
     insertLogSwitches
   };
-  
+ 

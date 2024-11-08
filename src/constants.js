@@ -3,10 +3,10 @@
  * 
  * Para acceder a una BD en la nube debes configurar un archivo .env
  */
-const dbHost = "localhost";
-const dbPort = "3306";
-const dbUser = "root";
-const dbPass = "reffg"; // CAMBIAR CONTRASENA
+const dbHost = "mysql-14c18e91-tec-acff.b.aivencloud.com";
+const dbPort = "25482";
+const dbUser = "avnadmin";
+const dbPass = "olos"; // CAMBIAR CONTRASENA
 const dbName = "lifeguard360_basededatos"; // NOMBRE DE LA BASE DE DATOS 
 
 /*
@@ -32,7 +32,7 @@ const api = '/api'; // Suggested API URL
   //HTTPS
   const getAlarma = '/getAlarma';
   const postAlarmaSensor = '/insertAlarma'; // Implemented Endpoint URL
-  const getAlarmaByDate = '/getAlarma';
+  const getAlarmaByDate = '/getAlarmaByDate';
   //SQL
   const selectAlarma = 'SELECT * FROM alarmas';
   const InsertAlarma = 'INSERT INTO alarmas (estado, ultrasonico, boton) values (?, ?, ?)';

@@ -1,145 +1,113 @@
 const mysql = require("../database/db");
-const constants = require("../constants")
+const constants = require("../constants");
 
-//* Endpoint #1. getLogAlarmas
-async function getLogAlarmas(req,res){
-  try{
+// Variables para almacenar el último valor enviado
+let lastSentState = null;
+let lastSentUltrasonico = null;
+let lastSentBoton = null;
 
-    var sql = constants.selectAlarma;
-    var conn = mysql.getConnection();
-    conn.connect((error)=>{
+// Función para insertar datos si estos han cambiado
+async function insertLogAlarmas(req, res) {
+  try {
+    const estado = req.body.estado;
+    const ultrasonico = req.body.ultrasonico;
+    const boton = req.body.boton;
+
+    // Verifica cambios en los estados
+    if (
+      estado !== lastSentState ||
+      ultrasonico !== lastSentUltrasonico ||
+      boton !== lastSentBoton
+    ) {
+      const sql = constants.InsertAlarma;
+      const params = [estado, ultrasonico, boton];
+      const conn = mysql.getConnection();
+
+      conn.connect((error) => {
         if (error) throw error;
-        conn.query(sql, (error, data, fields) => {
-            if (error) {
-              res.status(500);
-              res.send(error.message);
-            } else {
-              console.log(data);
-              res.json({
-                data,
-              });
-            }
-            conn.end();
-        });
-    });
-  }catch(error){
-    console.log(error)
-    res.status(500)
-    res.send(error)
-  }
-}
+        conn.execute(sql, params, (error, data, fields) => {
+          if (error) {
+            res.status(500).send(error.message);
+          } else {
+            console.log('Data inserted:', data);
+            res.json({
+              status: 200,
+              message: "Valor insertado",
+              affectedRows: data.affectedRows,
+            });
 
-//Endpoint 2 insertar datos 
-async function insertLogAlarmas(req,res){
-    try{
-  
-      var sql = constants.InsertAlarma;
-  
-      //el valor se recibe en el cuerpo de correo
-      //cualquier dato que vaya a ir en el insert deberás guardarlo en una variable local
-      var estado = req.body.estado;
-      var ultrasonico = req.body.ultrasonico;
-      var boton= req.body.boton;
-  
-      var conn = mysql.getConnection();
-      conn.connect((error)=>{
-          if (error) throw error;
-  
-          // así mismo, cualquier dato que vaya a insertarse, deberá incluirse en
-          // los valores de los parámetros del Insert
-          var params = [estado, ultrasonico, boton];
-          conn.execute(sql, params, (error, data, fields) => {
-              if (error) {
-                res.status(500);
-                res.send(error.message);
-              } else {
-                console.log(data);
-                res.json({
-                  status: 200,
-                  message: "Valor insertado",
-                  affectedRows: data.affectedRows,
-                });
-              }
-              conn.end();
-          });
+            // Actualizar los últimos valores enviados
+            lastSentState = estado;
+            lastSentUltrasonico = ultrasonico;
+            lastSentBoton = boton;
+          }
+          conn.end();
+        });
       });
-  
-    }catch(error){
-      console.log(error)
-      res.status(500)
-      res.send(error)
+    } else {
+      res.json({
+        status: 200,
+        message: "No se detectaron cambios en los datos y no se insertaron.",
+      });
     }
-    
+  } catch (error) {
+    console.error('Unexpected error:', error);
+    res.status(500).send(error.message);
   }
-
-
-
-// Endpoint 3 para la recopilacion de informacion filtrado por fechas
-async function getLogTemperatureByDateBetween(req,res){
-  try{
-    var sql = constants.selectTemperatureByDate;
-
-    var date_one = req.body.date_one;
-    var date_two = req.body.date_two;
-
-    var conn = mysql.getConnection();
-    conn.connect((error)=>{
-        if (error) throw error;
-        var params = [date_one,date_two];
-        conn.execute(sql, params, (error, data, fields) => {
-            if (error) {
-              res.status(500);
-              res.send(error.message);
-            } else {
-              console.log(data);
-              res.json({
-                data,
-              });
-            }
-            conn.end();
-        });
-    });
-  }catch(error){
-    console.log(error)
-    res.status(500)
-    res.send(error)
-  }
-  
 }
 
-async function getLogAlarmaByDateBetween(req,res){
-  try{
-    var sql = constants.selectAlarmaByDate;
+// Otros endpoints
+async function getLogAlarmas(req, res) {
+  try {
+    const sql = constants.selectAlarma;
+    const conn = mysql.getConnection();
 
-    var date_one = req.body.date_one;
-    var date_two = req.body.date_two;
-
-    var conn = mysql.getConnection();
-    conn.connect((error)=>{
-        if (error) throw error;
-        var params = [date_one,date_two];
-        conn.execute(sql, params, (error, data, fields) => {
-            if (error) {
-              res.status(500);
-              res.send(error.message);
-            } else {
-              console.log(data);
-              res.json({
-                data,
-              });
-            }
-            conn.end();
-        });
+    conn.connect((error) => {
+      if (error) throw error;
+      conn.query(sql, (error, data, fields) => {
+        if (error) {
+          res.status(500).send(error.message);
+        } else {
+          console.log('Data retrieved:', data);
+          res.json({ data });
+        }
+        conn.end();
+      });
     });
-  }catch(error){
-    console.log(error)
-    res.status(500)
-    res.send(error)
+  } catch (error) {
+    console.error('Unexpected error:', error);
+    res.status(500).send(error.message);
   }
-  
 }
 
+async function getLogAlarmaByDateBetween(req, res) {
+  try {
+    const sql = constants.selectAlarmaByDate;
+    const date_one = req.body.date_one;
+    const date_two = req.body.date_two;
+    const conn = mysql.getConnection();
 
+    conn.connect((error) => {
+      if (error) throw error;
+      const params = [date_one, date_two];
+      conn.execute(sql, params, (error, data, fields) => {
+        if (error) {
+          res.status(500).send(error.message);
+        } else {
+          console.log(data);
+          res.json({ data });
+        }
+        conn.end();
+      });
+    });
+  } catch (error) {
+    console.error('Unexpected error:', error);
+    res.status(500).send(error.message);
+  }
+}
 
-
-module.exports = {getLogAlarmas,insertLogAlarmas,getLogAlarmaByDateBetween};
+module.exports = {
+  getLogAlarmas,
+  insertLogAlarmas,
+  getLogAlarmaByDateBetween
+};
