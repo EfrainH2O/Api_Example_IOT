@@ -6,7 +6,7 @@
 const dbHost = "mysql-14c18e91-tec-acff.b.aivencloud.com";
 const dbPort = "25482";
 const dbUser = "avnadmin";
-const dbPass = "123456"; // CAMBIAR CONTRASENA
+const dbPass = "1234"; // CAMBIAR CONTRASENA
 const dbName = "lifeguard360_basededatos"; // NOMBRE DE LA BASE DE DATOS 
 
 /*
@@ -25,7 +25,7 @@ const api = '/api'; // Suggested API URL
   const getTemperatureHumSensorByDate = '/getTempHumByDate';
   // SQL
   const selectTempHum = 'SELECT id_temp_hum, fecha, temperatura, humedad FROM temperatura_humedad';
-  const insertTemperatureHum = 'INSERT INTO temperatura_humedad (temperatura, humedad) values (?, ?)';
+  const insertTemperatureHum = 'INSERT INTO temperatura_humedad (temperatura, humedad, area) values (?, ?, ?)';
   const selectTemperatureHumByDate = 'SELECT * FROM temperatura_humedad WHERE fecha between ? and ?';
 
 // SENSORES con alarmas
@@ -35,7 +35,7 @@ const api = '/api'; // Suggested API URL
   const getAlarmaByDate = '/getAlarmaByDate';
   //SQL
   const selectAlarma = 'SELECT * FROM alarmas';
-  const InsertAlarma = 'INSERT INTO alarmas (estado, ultrasonico, boton) values (?, ?, ?)';
+  const InsertAlarma = 'INSERT INTO alarmas (estado, ultrasonico, boton, area) values (?, ?, ?, ?)';
   const selectAlarmaByDate = 'SELECT * FROM alarmas WHERE fecha between ? and ?';
 
 
@@ -46,7 +46,7 @@ const api = '/api'; // Suggested API URL
   const getFotoresistenciaByDate = '/getFotoresistenciaByDate';
   //SQL
   const selectFotoresistencia = 'SELECT id_fotoresistencia, fecha, valor, nivel FROM Fotoresistencia';
-  const insertFotoresistencia = 'INSERT INTO Fotoresistencia (fecha, valor, nivel) VALUES (?, ?, ?)';
+  const insertFotoresistencia = 'INSERT INTO Fotoresistencia (fecha, valor, nivel, area) VALUES (?, ?, ?, ?)';
   const selectFotoresistenciaByDate = 'SELECT * FROM Fotoresistencia WHERE fecha between ? and ?';
 
 // SENSOR Switch
@@ -58,7 +58,7 @@ const api = '/api'; // Suggested API URL
   const selectSwicthes = 'select * from switch';
   const selectSwitchesByDate = 'select * from switch where fecha between ? and ?';
   const selectLastSwitches = '  select * from switch order by id_switch desc limit 1';
-  const insertSwitches = 'insert into switch (boton, ultrasonico, foto_resistencia, temperatura_humedad) values (?,?,?,?)';
+  const insertSwitches = 'INSERT INTO switch (boton, ultrasonico, foto_resistencia, temperatura_humedad, area) values (?, ?, ?, ?, ?)';
 
 
 module.exports = {

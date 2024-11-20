@@ -12,7 +12,7 @@ async function insertLogAlarmas(req, res) {
     const estado = req.body.estado;
     const ultrasonico = req.body.ultrasonico;
     const boton = req.body.boton;
-
+    const area = req.body.area; // Capturar el nuevo valor 'area'
     // Verifica cambios en los estados
     if (
       estado !== lastSentState ||
@@ -20,9 +20,8 @@ async function insertLogAlarmas(req, res) {
       boton !== lastSentBoton
     ) {
       const sql = constants.InsertAlarma;
-      const params = [estado, ultrasonico, boton];
+      const params = [estado, ultrasonico, boton, area]; 
       const conn = mysql.getConnection();
-
       conn.connect((error) => {
         if (error) throw error;
         conn.execute(sql, params, (error, data, fields) => {
@@ -35,7 +34,6 @@ async function insertLogAlarmas(req, res) {
               message: "Valor insertado",
               affectedRows: data.affectedRows,
             });
-
             // Actualizar los últimos valores enviados
             lastSentState = estado;
             lastSentUltrasonico = ultrasonico;

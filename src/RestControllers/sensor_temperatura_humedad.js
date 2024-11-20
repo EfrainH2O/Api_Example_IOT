@@ -41,14 +41,16 @@ function sendLatestDataToDatabase() {
 setInterval(sendLatestDataToDatabase, INTERVAL);
 
 // Endpoint para insertar datos de temperatura y humedad
+// Endpoint para insertar datos de temperatura y humedad
 async function insertLogTemperaturaHum(req, res) {
   try {
     // Recibir los datos del cuerpo de la solicitud
     const temperatura = req.body.temperatura;
     const humedad = req.body.humedad;
+    const area = req.body.area; // New field for 'area'
 
     // Almacenar el último dato recibido
-    latestData = { temperatura, humedad };
+    latestData = { temperatura, humedad, area };
 
     // Responder que los datos han sido recibidos
     res.json({
@@ -58,6 +60,35 @@ async function insertLogTemperaturaHum(req, res) {
   } catch (error) {
     console.error('Unexpected error:', error);
     res.status(500).send(error.message);
+  }
+}
+
+function sendLatestDataToDatabase() {
+  if (latestData !== null) {
+    const { temperatura, humedad, area } = latestData; // Include 'area'
+    const conn = mysql.getConnection();
+
+    conn.connect((error) => {
+      if (error) {
+        console.error('Error connecting to database:', error);
+        return;
+      }
+
+      const sql = constants.insertTemperatureHum;
+      const params = [temperatura, humedad, area]; // Add 'area' to params
+
+      conn.execute(sql, params, (error, data) => {
+        if (error) {
+          console.error('Error executing query:', error);
+        } else {
+          console.log('Latest data inserted:', data);
+        }
+        conn.end();
+      });
+
+      // Clear the latest data after insertion
+      latestData = null;
+    });
   }
 }
 

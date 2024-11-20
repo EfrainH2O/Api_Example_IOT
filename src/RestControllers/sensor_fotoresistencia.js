@@ -11,21 +11,18 @@ const INTERVAL = 5000; // 5 segundos
 // Función para insertar el dato más reciente en la base de datos si el nivel es diferente
 function sendLatestDataToDatabase() {
   if (latestData !== null) {
-    const { valor, nivel } = latestData;
-
+    const { valor, nivel, area } = latestData;  // Agregar 'area' aquí también
     // Solo enviar si el nivel es diferente al último nivel enviado
     if (nivel !== lastSentLevel) {
       const conn = mysql.getConnection();
-
+      
       conn.connect((error) => {
         if (error) {
           console.error('Error connecting to database:', error);
           return;
         }
-
         const sql = constants.insertFotoresistencia;
-        const params = [new Date(), valor, nivel];
-
+        const params = [new Date(), valor, nivel, area];  // Incluir 'area' en los parámetros
         conn.execute(sql, params, (error, data) => {
           if (error) {
             console.error('Error executing query:', error);
@@ -36,7 +33,7 @@ function sendLatestDataToDatabase() {
           }
           conn.end();
         });
-
+        
         // Limpiar el último dato después de insertarlo
         latestData = null;
       });
@@ -45,16 +42,14 @@ function sendLatestDataToDatabase() {
     }
   }
 }
-
 // Configurar el intervalo para enviar los datos más recientes
 setInterval(sendLatestDataToDatabase, INTERVAL);
-
 // Endpoint para insertar datos de Fotoresistencia
 async function insertLogFotoresistencia(req, res) {
   try {
     // Recibir los datos del cuerpo de la solicitud
     const valor = req.body.valor;
-
+    const area = req.body.area;  // Nuevo campo 'area'
     // Determinar el nivel en función del valor
     let nivel = '';
     if (valor < 100) {
@@ -66,10 +61,8 @@ async function insertLogFotoresistencia(req, res) {
     } else {
       nivel = 'Desconocido';
     }
-
     // Almacenar el último dato recibido
-    latestData = { valor, nivel };
-
+    latestData = { valor, nivel, area };
     // Responder que los datos han sido recibidos
     res.json({
       status: 200,

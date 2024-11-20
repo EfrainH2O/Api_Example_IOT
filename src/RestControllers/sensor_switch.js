@@ -63,7 +63,7 @@ async function getLogSwitchesByDateBetween(req,res){
 }
 
 
-//Endpoint para la insercion de informacion
+// Endpoint para la inserción de información de Switches
 async function insertLogSwitches(req, res) {
     try {
         const sqlInsert = constants.insertSwitches;
@@ -71,12 +71,11 @@ async function insertLogSwitches(req, res) {
         const nodo = req.body.nodo;
         const sA = req.body.s1;
         const sB = req.body.s2;
+        const area = req.body.area;
         let prevA = 0;
         let prevB = 0;
         let prevC = 0;
         let prevD = 0;
-
-
         const conn = mysql.getConnection();
         conn.connect((error) => {
             if (error) {
@@ -84,15 +83,13 @@ async function insertLogSwitches(req, res) {
                 res.status(500).send('Database connection failed.');
                 return;
             }
-
-            // Se recuperan los ultimos datos
+            // Se recuperan los últimos datos
             conn.query(sqlRetrieve, (error, results) => {
                 if (error) {
                     conn.end();
                     res.status(500).send(error.message);
                     return;
                 }
-
                 if (results.length > 0) {
                     const lastRecord = results[0];
                     if (nodo === 'N1') {
@@ -100,38 +97,18 @@ async function insertLogSwitches(req, res) {
                         prevB = lastRecord.temperatura_humedad;
                         prevC = lastRecord.boton;
                         prevD = lastRecord.ultrasonico;
-
-                        if(prevC == sA && prevD == sB){
-                            res.status(200).send("No");
-                            conn.end();
-                            return
-                        }
                     } else {
                         prevA = lastRecord.boton;
                         prevB = lastRecord.ultrasonico;
                         prevC = lastRecord.foto_resistencia;
                         prevD = lastRecord.temperatura_humedad;
-
-                        if(prevC == sA && prevD == sB){
-                            res.status(200).send("No");
-                            conn.end();
-                            return
-                        }
-
                     }
                 } else {
-                    // Se avisa si no se encontraron valores anteriores.
                     console.log("No se encontraron datos anteriores.");
-                    // Si no se encuentran, se reemplazan con 0
                 }
                 
-                
-
-                //Se verifica que se recuperaron correctamente los calores
-                const params = nodo === 'N1' ? [sA, sB, prevA, prevB] : [prevA, prevB, sA, sB];
-
-                console.log("Insertando con los paremetros:", params);
-
+                const params = nodo === 'N1' ? [sA, sB, prevA, prevB, area] : [prevA, prevB, sA, sB, area];
+                console.log("Insertando con los parámetros:", params);
                 // Se insertan nuevos valores del switch
                 conn.execute(sqlInsert, params, (error, data) => {
                     if (error) {
@@ -139,8 +116,8 @@ async function insertLogSwitches(req, res) {
                     } else {
                         res.json({
                             status: 200,
-                            message: "Valor insertado",
-                            affectedRows: data.affectedRows,
+                            message: 'Datos de switches insertados satisfactoriamente.',
+                            affectedRows: data.affectedRows
                         });
                     }
                     conn.end();
@@ -148,8 +125,8 @@ async function insertLogSwitches(req, res) {
             });
         });
     } catch (error) {
-        console.error('Error:', error);
-        res.status(500).send('Error insesperado.');
+        console.error('Unexpected error:', error);
+        res.status(500).send(error.message);
     }
 }
   
